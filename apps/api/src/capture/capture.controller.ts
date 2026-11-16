@@ -35,4 +35,26 @@ export class CaptureController {
   ): Promise<CaptureStats> {
     return this.capture.stats(auth.projectId, q);
   }
+
+  /** Capture adapter for Front */
+  @Post("adapter")
+  @HttpCode(201)
+  captureAdapter(
+    @Auth() auth: AuthContext,
+    @Body() body: any, // Define the appropriate type for the body based on your requirements
+  ): Promise<CaptureResult> {
+    // Implement the logic to handle the capture adapter request
+    const adaptedData = this.adaptCaptureData(body);
+    return this.capture.create(auth.projectId, { ...adaptedData, actor: auth.user?.email ?? null });
+  }
+
+  private adaptCaptureData(data: any): CaptureCreate {
+    // Implement the logic to adapt the incoming data to the CaptureCreate format
+    // This is a placeholder implementation; replace it with actual adaptation logic
+    return {
+      // Map the incoming data to the required structure
+      ...data,
+      // Add any additional properties or transformations as needed
+    } as CaptureCreate;
+  }
 }
